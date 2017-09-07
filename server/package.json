@@ -12,6 +12,6 @@
     "request": "^2.81.0"
   },
   "scripts": {
-    "start:dev": "nodemon index.js"
+    "start:dev": "nodemon src/index.js"
   }
 }
