@@ -1,11 +1,13 @@
 const mongoose = require('mongoose')
 const seedData = require('./seeds.json')
 
+require('dotenv').load()
+
 require('../connection')
 
 const Word = mongoose.model('Word')
 
-mongoose.connect('mongodb://aspittel:Sp.51141@ds119064.mlab.com:19064/gre_study_plan')
+mongoose.connect(process.env.DB)
 mongoose.set('debug', true)
 
 Word.remove({}).then(() => 
