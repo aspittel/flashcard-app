@@ -6,6 +6,7 @@
     "dotenv": "^4.0.0",
     "ejs": "^2.5.7",
     "express": "^4.15.4",
+    "jsonwebtoken": "^8.0.0",
     "mongoose": "4.4.10",
     "morgan": "^1.8.2",
     "pryjs": "^1.0.3",

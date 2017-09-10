@@ -4,17 +4,24 @@ const pry = require('pryjs')
 
 require('dotenv').load()
 
+// TODO keep going with: https://scotch.io/tutorials/authenticate-a-node-js-api-with-json-web-tokens
+const UserSchema = new mongoose.Schema({
+    username: String,
+    password: String
+})
+const User = mongoose.model('User', UserSchema)
+
 const DefinitionSchema = new mongoose.Schema({
     etymologies: [String],
     definitions: [String],
     examples: [String],
     lexicalCategory: String
 })
-mongoose.model('Definition', DefinitionSchema)
-const Definition = mongoose.model('Definition')
+const Definition = mongoose.model('Definition', DefinitionSchema)
 
 
 const WordSchema = new mongoose.Schema({
+        user: UserSchema,
         word: String,
         definitions: [DefinitionSchema],
         done: Boolean
