@@ -3,42 +3,28 @@
         <nav>
             <div class="nav-wrapper red lighten-1">
                 <a href="#" class="brand-logo left">Study</a>
-                <div class="input-field right">
-                    <input v-model="card" @keyup.enter="submit" id="new-card" placeholder="add word">
-                </div>
                 <div class="left hide-on-med-and-down">{{ flashcards.length }} cards</div>
+                <new-flashcard></new-flashcard>
             </div>
         </nav>
 
         <main>
             <div class="container" v-if="flashcards[currentIndex]">
-                <h1>{{ flashcards[currentIndex].word }}</h1>
-                <div v-if="show">
-                    <div 
-                        v-for="def, idx in flashcards[currentIndex].definitions"
-                        v-bind:key="def._id"
-                        class="card"
-                        v-bind:style="{ backgroundColor: colors[idx] }">
-                        <h5>Definition {{ idx + 1 }}: </h5>
-                        <p>{{ def.definitions[0] }}</p>
-                        <p v-if="def.etymologies[0]">
-                            <b>Etymology:</b> {{ def.etymologies[0] }}</p>
-                        <p>
-                        <b>Part of Speech:</b> {{ def.lexicalCategory }}</p>
-                        <div v-for="example, idx in def.examples" v-bind:key="idx">
-                            <b>Example:</b> {{ example }}
-                        </div>
-                    </div>
-                    <button 
-                        class="btn-floating btn-large waves-effect waves-light green lighten-1"
-                        @click="done">
-                        <i class="material-icons">done</i>
-                    </button>
-                </div>
+                <flashcard-detail 
+                    :flashcard="flashcards[currentIndex]"
+                    :show="show"
+                    >
+                </flashcard-detail>
+                <button 
+                    class="btn-floating btn-large waves-effect waves-light green lighten-1"
+                    @click="done">
+                    <i class="material-icons">done</i>
+                </button>
             </div>
 
             <div class="container" v-else>
                 <button 
+                    v-if="show"
                     class="blue lighten-1 waves-effect waves-light btn-large" 
                     @click="restart">
                     Restart
@@ -51,6 +37,8 @@
 <script>
     import axios from 'axios'
     import { CLIENT_URL } from '../constants.js'
+    import NewFlashcard from './NewFlashcard.vue'
+    import FlashcardDetail from './FlashcardDetail.vue'
 
     export default {
         name: 'app',
@@ -58,7 +46,6 @@
             return {
                 currentIndex: 0,
                 flashcards: [],
-                card: "",
                 show: false,
                 colors: ['#673ab7', '#2196f3', '#26a69a', '#e91e63']
             }
@@ -67,18 +54,17 @@
             axios.get(`${CLIENT_URL}/api/words`)
                 .then(response => this.flashcards = response.data)
                 .catch(err => console.log(err))
+            
             window.addEventListener('keyup', (event) => {
-                if (event.keyCode === 13) this.next()
+                // move to next card on right arrow
+                if (event.keyCode === 39) this.next()
             })
         },
+        components: {
+            NewFlashcard,
+            FlashcardDetail
+        },
         methods: {
-            submit: function () {
-                event.preventDefault()
-                axios.post(`${CLIENT_URL}/api/words`, { word: this.card })
-                     .then(response => this.flashcards = response.data)
-                     .catch(err => console.log(err))
-                this.card = ""
-            },
             next: function () {
                 if (this.show) this.currentIndex ++
                 this.show = !this.show
