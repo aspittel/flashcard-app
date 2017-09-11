@@ -43,3 +43,4 @@ Both run locally with the command.
 - [ ] Adding users
 - [ ] Adding a home page with a dashboard view
 - [ ] Cleaning up and modularizing the code
+- [ ] Deploy!
