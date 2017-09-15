@@ -1,14 +1,40 @@
 const mongoose = require('mongoose')
 const request = require('request')
 const pry = require('pryjs')
+const bcrypt = require('bcrypt')
 
 require('dotenv').load()
 
-// TODO keep going with: https://scotch.io/tutorials/authenticate-a-node-js-api-with-json-web-tokens
 const UserSchema = new mongoose.Schema({
-    username: String,
-    password: String
+    username: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    password: {
+        type: String,
+        required: true,
+        unique: true
+    }
 })
+
+UserSchema.pre('save', function (next) {
+    bcrypt.genSalt(10, (err, salt) => {
+        if (err) return next(err)
+        bcrypt.hash(this.password, salt, (err, hash) =>{
+            if (err) return next(err)
+            this.password = hash
+            next()
+        })
+    })
+})
+
+UserSchema.methods.comparePassword = function (password, callback) {
+    bcrypt.compare(password, this.password, (err, isMatch) => {
+        if (err) return callback(err)
+        callback(null, isMatch)
+    })
+}
 const User = mongoose.model('User', UserSchema)
 
 const DefinitionSchema = new mongoose.Schema({
@@ -21,7 +47,7 @@ const Definition = mongoose.model('Definition', DefinitionSchema)
 
 
 const WordSchema = new mongoose.Schema({
-        user: UserSchema,
+        // user: UserSchema,
         word: String,
         definitions: [DefinitionSchema],
         done: Boolean

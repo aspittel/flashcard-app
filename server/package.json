@@ -1,14 +1,19 @@
 {
   "dependencies": {
+    "bcrypt": "^1.0.3",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.2",
     "cors": "^2.8.4",
     "dotenv": "^4.0.0",
     "ejs": "^2.5.7",
     "express": "^4.15.4",
-    "jsonwebtoken": "^8.0.0",
+    "jsonwebtoken": "^8.0.1",
     "mongoose": "4.4.10",
+    "mongoose-auth": "^0.0.12",
     "morgan": "^1.8.2",
+    "passport": "^0.4.0",
+    "passport-jwt": "^3.0.0",
+    "passport-local-mongoose": "^4.2.1",
     "pryjs": "^1.0.3",
     "request": "^2.81.0"
   },
